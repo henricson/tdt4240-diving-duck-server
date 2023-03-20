@@ -1,12 +1,13 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.EntityFrameworkCore;
 
 namespace DivingDuckServer.Models
 {
-	public class Score
+    [PrimaryKey(nameof(Id))]
+    public class Score
 	{
-        [Key]
-        public int ScoreId { get; set; }
+        public int Id { get; set; }
         public int ScoreXPos { get; set; }
     }
 }

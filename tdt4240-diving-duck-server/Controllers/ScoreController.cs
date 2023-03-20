@@ -8,15 +8,15 @@ using Microsoft.EntityFrameworkCore;
 using DivingDuckServer.Data;
 using DivingDuckServer.Models;
 
-namespace tdt4240_diving_duck_server.Controllers
+namespace DivingDuckServer.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     public class ScoreController : ControllerBase
     {
-        private readonly ScoreContext _context;
+        private readonly MyContext _context;
 
-        public ScoreController(ScoreContext context)
+        public ScoreController(MyContext context)
         {
             _context = context;
         }
@@ -55,7 +55,7 @@ namespace tdt4240_diving_duck_server.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutScore(int id, Score score)
         {
-            if (id != score.ScoreId)
+            if (id != score.Id)
             {
                 return BadRequest();
             }
@@ -93,7 +93,7 @@ namespace tdt4240_diving_duck_server.Controllers
             _context.Scores.Add(score);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetScore", new { id = score.ScoreId }, score);
+            return CreatedAtAction("GetScore", new { id = score.Id }, score);
         }
 
         // DELETE: api/Score/5
@@ -118,7 +118,7 @@ namespace tdt4240_diving_duck_server.Controllers
 
         private bool ScoreExists(int id)
         {
-            return (_context.Scores?.Any(e => e.ScoreId == id)).GetValueOrDefault();
+            return (_context.Scores?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

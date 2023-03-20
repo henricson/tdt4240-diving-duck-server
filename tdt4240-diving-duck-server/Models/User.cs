@@ -7,11 +7,11 @@ using System.ComponentModel.DataAnnotations;
 
 namespace DivingDuckServer.Models
 {
-	public class User
+    [PrimaryKey(nameof(Id))]
+    public class User
 	{
-        [Key]
-        public int UserId { get; set; }
-		public string UserName { get; set; }
+        public int Id { get; set; }
+		public string? UserName { get; set; }
 		public List<Score> Scores { get; } = new();
 	}
 

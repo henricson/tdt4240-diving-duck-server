@@ -6,14 +6,14 @@ using DivingDuckServer.Models;
 
 namespace DivingDuckServer.Data
 {
-    public class ScoreContext : DbContext
+    public class MyContext : DbContext
     {
         public DbSet<Score> Scores { get; set; }
         public DbSet<User> Users { get; set; }
 
         public string DbPath { get; }
 
-        public ScoreContext()
+        public MyContext()
         {
             var folder = Environment.SpecialFolder.LocalApplicationData;
             var path = Environment.GetFolderPath(folder);
