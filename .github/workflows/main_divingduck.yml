@@ -47,6 +47,9 @@ jobs:
         with:
           name: .net-app
 
+      - name: Install dotnet-ef tool
+        run: dotnet tool install --global dotnet-ef --version 7.0.0
+
       - name: Run database migration
         run: dotnet ef database update --project ${{env.DOTNET_ROOT}}/myapp
 
