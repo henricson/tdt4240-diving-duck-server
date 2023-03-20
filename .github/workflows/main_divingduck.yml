@@ -47,6 +47,9 @@ jobs:
         with:
           name: .net-app
 
+      - name: Run database migration
+        run: dotnet ef database update --project ${{env.DOTNET_ROOT}}/myapp
+
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
