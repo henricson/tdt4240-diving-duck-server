@@ -10,6 +10,7 @@ namespace DivingDuckServer.Models
     [PrimaryKey(nameof(Id))]
     public class User
 	{
+        [Required]
         public int Id { get; set; }
 		public string? UserName { get; set; }
 		public List<Score> Scores { get; } = new();

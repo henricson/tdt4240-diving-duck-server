@@ -84,16 +84,18 @@ namespace DivingDuckServer.Controllers
         // POST: api/Score
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Score>> PostScore(Score score)
+        public async Task<ActionResult<Score>> PostScore(ScoreDTO score)
         {
           if (_context.Scores == null)
           {
               return Problem("Entity set 'ScoreContext.Scores'  is null.");
           }
-            _context.Scores.Add(score);
+            var scoreItem = new Score { ScoreXPos = score.ScoreXPos };
+
+            _context.Scores.Add(scoreItem);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetScore", new { id = score.Id }, score);
+            return CreatedAtAction(nameof(GetScore), new { id = scoreItem.Id }, scoreItem);
         }
 
         // DELETE: api/Score/5
