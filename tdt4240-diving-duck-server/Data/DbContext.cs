@@ -26,7 +26,7 @@ namespace DivingDuckServer.Data
         {
             if (_env.IsProduction())
             {
-                string connectionString = Environment.GetEnvironmentVariable("DefaultConnection")!;
+                string connectionString = Environment.GetEnvironmentVariable("POSTGRESQLCONNSTR_AZURE_POSTGRESQL_CONNECTIONSTRING")!;
                 if (string.IsNullOrEmpty(connectionString))
                 {
                     throw new InvalidOperationException("Connection string not found in environment variables.");
