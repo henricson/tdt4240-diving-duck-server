@@ -9,20 +9,34 @@ namespace DivingDuckServer.Data
     public class MyContext : DbContext
     {
         private IConfiguration _configuration;
+        private IWebHostEnvironment _env;
+
         public DbSet<Score> Scores { get; set; }
         public DbSet<User> Users { get; set; }
 
 
-        public MyContext(IConfiguration configuration)
+        public MyContext(IConfiguration configuration, IWebHostEnvironment env)
         {
             _configuration = configuration;
+            _env = env;
         }
+
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-           
-            optionsBuilder.UseNpgsql(_configuration.GetConnectionString("DefaultConnection"));
-          
+            if (_env.IsProduction())
+            {
+                string connectionString = Environment.GetEnvironmentVariable("ConnectionStringEnvVar")!;
+                if (string.IsNullOrEmpty(connectionString))
+                {
+                    throw new InvalidOperationException("Connection string not found in environment variables.");
+                }
+                optionsBuilder.UseNpgsql(connectionString);
+            }
+            else
+            {
+                optionsBuilder.UseNpgsql(_configuration.GetConnectionString("DefaultConnection"));
+            }
         }
     }
 }
