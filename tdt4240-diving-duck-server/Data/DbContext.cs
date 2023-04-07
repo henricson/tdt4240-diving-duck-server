@@ -26,7 +26,7 @@ namespace DivingDuckServer.Data
         {
             if (_env.IsProduction())
             {
-                optionsBuilder.UseNpgsql(_configuration.GetConnectionString("AZURE_POSTGRESQL_CONNECTIONSTRING"));
+                optionsBuilder.UseNpgsql(Environment.GetEnvironmentVariable("POSTGRESQLCONNSTR_AZURE_POSTGRESQL_CONNECTIONSTRING"));
             }
             else
             {
