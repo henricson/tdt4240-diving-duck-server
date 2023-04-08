@@ -33,6 +33,14 @@ namespace DivingDuckServer.Data
                 optionsBuilder.UseNpgsql(_configuration.GetConnectionString("DefaultConnection"));
             }
         }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<User>()
+                .HasMany(e => e.Scores)
+                .WithOne(e => e.User)
+                .HasForeignKey(e => e.UserId);
+        }
     }
 }
 

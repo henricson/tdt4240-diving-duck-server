@@ -10,12 +10,15 @@ namespace DivingDuckServer.Models
         [Required]
         public int Id { get; set; }
         public int ScoreXPos { get; set; }
+        public int? UserId { get; set; }
+        public User? User { get; set; }
     }
 
     public class ScoreDTO
     {
         [Required]
         public int ScoreXPos { get; set; }
+        public int UserId { get; set; }
     }
 }
 

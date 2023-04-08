@@ -23,24 +23,47 @@ namespace DivingDuckServer.Controllers
 
         // GET: api/User
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<User>>> GetUsers()
+        public async Task<ActionResult<IEnumerable<UserResponse>>> GetUsers()
         {
           if (_context.Users == null)
           {
               return NotFound();
           }
-            return await _context.Users.ToListAsync();
+            return await _context.Users.Include(u => u.Scores).Select(u => new UserResponse { Id = u.Id, Scores = u.Scores.Select(s => new ScoreResponse { Id = s.Id, ScoreXPos = s.ScoreXPos}), UserName = u.UserName  }).ToListAsync();
+        }
+
+        public class ScoreResponse
+        {
+            public int Id { get; set; }
+            public int ScoreXPos { get; set; }
+        }
+
+        public class UserResponse
+        {
+            public int Id { get; set; }
+            public string? UserName { get; set; }
+            public IEnumerable<ScoreResponse> Scores { get; set; } = Array.Empty<ScoreResponse>();
+     
         }
 
         // GET: api/User/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<User>> GetUser(int id)
+        public async Task<ActionResult<UserResponse>> GetUser(int id)
         {
           if (_context.Users == null)
           {
               return NotFound();
           }
-            var user = await _context.Users.FindAsync(id);
+            var user = await _context.Users.Where(u => u.Id == id).Select(u => new UserResponse
+            {
+                Id = u.Id,
+                UserName = u.UserName,
+                Scores = u.Scores.Select(s => new ScoreResponse
+                {
+                    Id = s.Id,
+                    ScoreXPos = s.ScoreXPos
+                })
+            }).FirstOrDefaultAsync();
 
             if (user == null)
             {

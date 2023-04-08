@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DivingDuckServer.Data;
 using DivingDuckServer.Models;
+using static DivingDuckServer.Controllers.UserController;
 
 namespace DivingDuckServer.Controllers
 {
@@ -23,23 +24,26 @@ namespace DivingDuckServer.Controllers
 
         // GET: api/Score
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Score>>> GetScores()
+        public async Task<ActionResult<IEnumerable<ScoreResponse>>> GetScores()
         {
-          if (_context.Scores == null)
-          {
-              return NotFound();
-          }
-            return await _context.Scores.ToListAsync();
+            if (_context.Scores == null)
+            {
+                return NotFound();
+            }
+            return await _context.Scores.Include(s => s.User).Select(s => new ScoreResponse {
+                Id = s.Id,
+                ScoreXPos = s.ScoreXPos
+            }).ToListAsync();
         }
 
         // GET: api/Score/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Score>> GetScore(int id)
         {
-          if (_context.Scores == null)
-          {
-              return NotFound();
-          }
+            if (_context.Scores == null)
+            {
+                return NotFound();
+            }
             var score = await _context.Scores.FindAsync(id);
 
             if (score == null)
@@ -84,18 +88,23 @@ namespace DivingDuckServer.Controllers
         // POST: api/Score
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Score>> PostScore(ScoreDTO score)
+        public async Task<ActionResult<UserController.ScoreResponse>> PostScore(ScoreDTO score)
         {
           if (_context.Scores == null)
           {
               return Problem("Entity set 'ScoreContext.Scores'  is null.");
           }
-            var scoreItem = new Score { ScoreXPos = score.ScoreXPos };
+            var user = _context.Users.FirstOrDefault(c => c.Id == score.UserId);
+            if(user == null)
+            {
+                return Problem("User does not exist");
+            }
+            var scoreItem = new Score { ScoreXPos = score.ScoreXPos, User = user };
 
             _context.Scores.Add(scoreItem);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetScore), new { id = scoreItem.Id }, scoreItem);
+            return CreatedAtAction("PostScore", new UserController.ScoreResponse { Id = scoreItem.Id, ScoreXPos = scoreItem.ScoreXPos });
         }
 
         // DELETE: api/Score/5

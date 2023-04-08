@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using DivingDuckServer.Data;
 
 var builder = WebApplication.CreateBuilder(args);
