@@ -16,5 +16,11 @@ namespace DivingDuckServer.Models
 		public List<Score> Scores { get; } = new();
 	}
 
+    public class UserDTO
+    {
+        public string? UserName { get; set; }
+        public List<Score> Scores { get; } = new();
+    }
+
 }
 

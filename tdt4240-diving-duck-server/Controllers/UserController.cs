@@ -53,13 +53,8 @@ namespace DivingDuckServer.Controllers
         // PUT: api/User/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutUser(int id, User user)
+        public async Task<IActionResult> PutUser(int id, UserDTO user)
         {
-            if (id != user.Id)
-            {
-                return BadRequest();
-            }
-
             _context.Entry(user).State = EntityState.Modified;
 
             try
@@ -84,16 +79,17 @@ namespace DivingDuckServer.Controllers
         // POST: api/User
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<User>> PostUser(User user)
+        public async Task<ActionResult<User>> PostUser(UserDTO user)
         {
-          if (_context.Users == null)
-          {
-              return Problem("Entity set 'ScoreContext.Users'  is null.");
-          }
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
+            if (_context.Users == null)
+            {
+                return Problem("Entity set 'ScoreContext.Users'  is null.");
+            }
+            User userItem = new User { UserName=user.UserName };
 
-            return CreatedAtAction("GetUser", new { id = user.Id }, user);
+            _context.Users.Add(userItem);
+            await _context.SaveChangesAsync();
+            return CreatedAtAction("GetUser", new { id = userItem.Id }, userItem);
         }
 
         // DELETE: api/User/5
