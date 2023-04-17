@@ -1,12 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using DivingDuckServer.Data;
 using DivingDuckServer.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using static DivingDuckServer.Controllers.UserController;
 
 namespace DivingDuckServer.Controllers
@@ -30,7 +25,8 @@ namespace DivingDuckServer.Controllers
             {
                 return NotFound();
             }
-            return await _context.Scores.Include(s => s.User).Select(s => new ScoreResponse {
+            return await _context.Scores.Include(s => s.User).Select(s => new ScoreResponse
+            {
                 Id = s.Id,
                 ScoreXPos = s.ScoreXPos
             }).ToListAsync();
@@ -90,12 +86,12 @@ namespace DivingDuckServer.Controllers
         [HttpPost]
         public async Task<ActionResult<UserController.ScoreResponse>> PostScore(ScoreDTO score)
         {
-          if (_context.Scores == null)
-          {
-              return Problem("Entity set 'ScoreContext.Scores'  is null.");
-          }
+            if (_context.Scores == null)
+            {
+                return Problem("Entity set 'ScoreContext.Scores'  is null.");
+            }
             var user = _context.Users.FirstOrDefault(c => c.Id == score.UserId);
-            if(user == null)
+            if (user == null)
             {
                 return Problem("User does not exist");
             }

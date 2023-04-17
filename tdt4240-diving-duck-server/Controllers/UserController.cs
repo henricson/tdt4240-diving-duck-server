@@ -1,12 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using DivingDuckServer.Data;
 using DivingDuckServer.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace DivingDuckServer.Controllers
 {
@@ -25,11 +20,11 @@ namespace DivingDuckServer.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<UserResponse>>> GetUsers()
         {
-          if (_context.Users == null)
-          {
-              return NotFound();
-          }
-            return await _context.Users.Include(u => u.Scores).Select(u => new UserResponse { Id = u.Id, Scores = u.Scores.Select(s => new ScoreResponse { Id = s.Id, ScoreXPos = s.ScoreXPos}), UserName = u.UserName  }).ToListAsync();
+            if (_context.Users == null)
+            {
+                return NotFound();
+            }
+            return await _context.Users.Include(u => u.Scores).Select(u => new UserResponse { Id = u.Id, Scores = u.Scores.Select(s => new ScoreResponse { Id = s.Id, ScoreXPos = s.ScoreXPos }), UserName = u.UserName }).ToListAsync();
         }
 
         public class ScoreResponse
@@ -43,17 +38,17 @@ namespace DivingDuckServer.Controllers
             public int Id { get; set; }
             public string? UserName { get; set; }
             public IEnumerable<ScoreResponse> Scores { get; set; } = Array.Empty<ScoreResponse>();
-     
+
         }
 
         // GET: api/User/5
         [HttpGet("{id}")]
         public async Task<ActionResult<UserResponse>> GetUser(int id)
         {
-          if (_context.Users == null)
-          {
-              return NotFound();
-          }
+            if (_context.Users == null)
+            {
+                return NotFound();
+            }
             var user = await _context.Users.Where(u => u.Id == id).Select(u => new UserResponse
             {
                 Id = u.Id,
@@ -108,7 +103,7 @@ namespace DivingDuckServer.Controllers
             {
                 return Problem("Entity set 'ScoreContext.Users'  is null.");
             }
-            User userItem = new User { UserName=user.UserName };
+            User userItem = new User { UserName = user.UserName };
 
             _context.Users.Add(userItem);
             await _context.SaveChangesAsync();

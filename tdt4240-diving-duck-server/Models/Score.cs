@@ -1,15 +1,14 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
-using Microsoft.EntityFrameworkCore;
 
 namespace DivingDuckServer.Models
 {
     [PrimaryKey(nameof(Id))]
     public class Score
-	{
+    {
         [Required]
         public int Id { get; set; }
-        public int ScoreXPos { get; set; }
+        public float TimeElapsed { get; set; }
         public int? UserId { get; set; }
         public User? User { get; set; }
     }
@@ -17,7 +16,7 @@ namespace DivingDuckServer.Models
     public class ScoreDTO
     {
         [Required]
-        public int ScoreXPos { get; set; }
+        public float TimeElapsed { get; set; }
         public int UserId { get; set; }
     }
 }
