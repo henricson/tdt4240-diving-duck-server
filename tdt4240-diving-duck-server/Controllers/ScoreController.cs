@@ -28,7 +28,7 @@ namespace DivingDuckServer.Controllers
             return await _context.Scores.Include(s => s.User).Select(s => new ScoreResponse
             {
                 Id = s.Id,
-                ScoreXPos = s.ScoreXPos
+                TimeElapsed = s.TimeElapsed
             }).ToListAsync();
         }
 
@@ -95,12 +95,12 @@ namespace DivingDuckServer.Controllers
             {
                 return Problem("User does not exist");
             }
-            var scoreItem = new Score { ScoreXPos = score.ScoreXPos, User = user };
+            var scoreItem = new Score { TimeElapsed = score.TimeElapsed, User = user };
 
             _context.Scores.Add(scoreItem);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("PostScore", new UserController.ScoreResponse { Id = scoreItem.Id, ScoreXPos = scoreItem.ScoreXPos });
+            return CreatedAtAction("PostScore", new UserController.ScoreResponse { Id = scoreItem.Id, TimeElapsed = scoreItem.TimeElapsed });
         }
 
         // DELETE: api/Score/5

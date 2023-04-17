@@ -24,13 +24,13 @@ namespace DivingDuckServer.Controllers
             {
                 return NotFound();
             }
-            return await _context.Users.Include(u => u.Scores).Select(u => new UserResponse { Id = u.Id, Scores = u.Scores.Select(s => new ScoreResponse { Id = s.Id, ScoreXPos = s.ScoreXPos }), UserName = u.UserName }).ToListAsync();
+            return await _context.Users.Include(u => u.Scores).Select(u => new UserResponse { Id = u.Id, Scores = u.Scores.Select(s => new ScoreResponse { Id = s.Id, TimeElapsed = s.TimeElapsed }), UserName = u.UserName }).ToListAsync();
         }
 
         public class ScoreResponse
         {
             public int Id { get; set; }
-            public int ScoreXPos { get; set; }
+            public float TimeElapsed { get; set; }
         }
 
         public class UserResponse
@@ -56,7 +56,7 @@ namespace DivingDuckServer.Controllers
                 Scores = u.Scores.Select(s => new ScoreResponse
                 {
                     Id = s.Id,
-                    ScoreXPos = s.ScoreXPos
+                    TimeElapsed = s.TimeElapsed
                 })
             }).FirstOrDefaultAsync();
 
