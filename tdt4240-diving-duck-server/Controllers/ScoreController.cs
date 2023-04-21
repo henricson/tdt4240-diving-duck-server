@@ -17,6 +17,8 @@ namespace DivingDuckServer.Controllers
             _context = context;
         }
 
+
+
         // GET: api/Score
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ScoreResponse>>> GetScores()
@@ -25,11 +27,13 @@ namespace DivingDuckServer.Controllers
             {
                 return NotFound();
             }
-            return await _context.Scores.Include(s => s.User).Select(s => new ScoreResponse
-            {
-                Id = s.Id,
-                TimeElapsed = s.TimeElapsed
-            }).ToListAsync();
+            var scores = await _context.Scores.Include(s => s.User).ToListAsync();
+            var filteredScores = scores
+                .Select((s, i) => new { Score = s, Index = i })
+                .Where(pair => pair.Index == 0 || Math.Abs(pair.Score.TimeElapsed - scores.ElementAt(pair.Index - 1).TimeElapsed) >= 20)
+                .Select(pair => new ScoreResponse { Id = pair.Score.Id, TimeElapsed = pair.Score.TimeElapsed })
+                .ToList();
+            return filteredScores;
         }
 
         // GET: api/Score/5
