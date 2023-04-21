@@ -30,7 +30,7 @@ namespace DivingDuckServer.Controllers
             var scores = await _context.Scores.Include(s => s.User).ToListAsync();
             var filteredScores = scores
                 .Select((s, i) => new { Score = s, Index = i })
-                .Where(pair => pair.Index == 0 || Math.Abs(pair.Score.TimeElapsed - scores.ElementAt(pair.Index - 1).TimeElapsed) >= 20)
+                .Where(pair => pair.Index == 0 || Math.Abs(pair.Score.TimeElapsed - scores.ElementAt(pair.Index - 1).TimeElapsed) >= 1)
                 .Select(pair => new ScoreResponse { Id = pair.Score.Id, TimeElapsed = pair.Score.TimeElapsed })
                 .ToList();
             return filteredScores;
